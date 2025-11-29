@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gonorrhea (Neisseria gonorrhoeae) Immunity Analysis</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        .header {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 2.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .risk-badge {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .score-display {
+            font-size: 4em;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .metric-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        .metric-label {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .metric-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .evidence-table {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+        .evidence-table h3 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.6em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        th {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+        tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+        .peptide-seq {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+        .score-bar {
+            display: inline-block;
+            width: 80px;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60, #f39c12, #e74c3c);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+        .rank-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            .metrics-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2.2em; }
+            .score-display { font-size: 3em; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦠 Gonorrhea (Neisseria gonorrhoeae)</h1>
+            <div class="score-display">4.0%</div>
+            <div class="risk-badge">Low Risk</div>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Exposure Score</div>
+                <div class="metric-value">0.040</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Evidence Count</div>
+                <div class="metric-value">20</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Model AUC</div>
+                <div class="metric-value">0.753</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Model Accuracy</div>
+                <div class="metric-value">0.745</div>
+            </div>
+        </div>
+        
+        <div class="evidence-table">
+            <h3>🔬 Top TCR-Peptide Binding Evidence</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>TCR (CDR3)</th>
+                        <th>MHC Allele</th>
+                        <th>Pathogen Peptide</th>
+                        <th>Binding Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                    <tr>
+                        <td><span class="rank-badge">#1</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSGTGGYEQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">TLRRSGLFEA</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 81.53987121582031%"></span>
+                            </span>
+                            <strong>0.815</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#2</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSGTGGYEQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">SQDVVVRLRT</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 81.47709655761719%"></span>
+                            </span>
+                            <strong>0.815</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#3</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSERTSGGRDTQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">TLRRSGLFEA</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 81.4002914428711%"></span>
+                            </span>
+                            <strong>0.814</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#4</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSERTSGGRDTQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">SQDVVVRLRT</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 81.3318099975586%"></span>
+                            </span>
+                            <strong>0.813</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#5</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSLRIAGGPDTQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">TLRRSGLFEA</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 81.26245880126953%"></span>
+                            </span>
+                            <strong>0.813</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#6</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSLRIAGGPDTQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">SQDVVVRLRT</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 81.19752502441406%"></span>
+                            </span>
+                            <strong>0.812</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#7</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSGTGGYEQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">STSTAHLLG</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 80.92967987060547%"></span>
+                            </span>
+                            <strong>0.809</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#8</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSLSGAYEQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">TLRRSGLFEA</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 80.87860107421875%"></span>
+                            </span>
+                            <strong>0.809</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#9</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSLSGAYEQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">SQDVVVRLRT</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 80.82441711425781%"></span>
+                            </span>
+                            <strong>0.808</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#10</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSGTGGYEQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">TTFPTYFELE</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 80.78932189941406%"></span>
+                            </span>
+                            <strong>0.808</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#11</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSERTSGGRDTQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">STSTAHLLG</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 80.78339385986328%"></span>
+                            </span>
+                            <strong>0.808</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#12</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSGTGGYEQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">FTSRYIFAT</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 80.78328704833984%"></span>
+                            </span>
+                            <strong>0.808</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#13</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSERTSGGRDTQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">FTSRYIFAT</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 80.65235900878906%"></span>
+                            </span>
+                            <strong>0.807</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#14</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSLRIAGGPDTQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">STSTAHLLG</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 80.64312744140625%"></span>
+                            </span>
+                            <strong>0.806</strong>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td><span class="rank-badge">#15</span></td>
+                        <td style="font-family: monospace; font-size: 0.95em; font-weight: 500;">CASSERTSGGRDTQYF</td>
+                        <td style="font-weight: 500;">QEFFIASGAAVDAIMWLFLECYDLQRATYHVGFT</td>
+                        <td><span class="peptide-seq">TTFPTYFELE</span></td>
+                        <td>
+                            <span class="score-bar">
+                                <span class="score-fill" style="width: 80.64128112792969%"></span>
+                            </span>
+                            <strong>0.806</strong>
+                        </td>
+                    </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+    
